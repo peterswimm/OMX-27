@@ -75,7 +75,7 @@ enum multDiv
 };
 
 float multValues[] = {.25, .5, 1, 2, 4, 8, 16};
-const char* mdivs[] = {"1/4", "1/2", "1x", "2x", "4x", "8x", "16x"};
+const char* mdivs[] = {"/64", "/32", "/16", "1/8", "1/4", "1/2", "1"};
 
 enum Dialogs{
      COPY = 0,

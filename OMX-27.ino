@@ -588,8 +588,8 @@ void dispGenericMode(int submode, int selected){
 			break;
 		case SUBMODE_SEQ2:
 			legends[0] = "PTN";
-			legends[1] = "LEN";
-			legends[2] = "RATE"; 
+			legends[1] = "PLEN";
+			legends[2] = "STEP"; 
 			legends[3] = "CV"; //cvPattern
 			legendVals[0] = playingPattern+1;
 			legendVals[1] = PatternLength(playingPattern);
@@ -625,7 +625,7 @@ void dispGenericMode(int submode, int selected){
 			break;
 		case SUBMODE_PATTPARAMS3:
 			legends[0] = "RATE";
-			legends[1] = "---";
+			legends[1] = "SOLO";
 			legends[2] = "---";
 			legends[3] = "---";
 
@@ -634,7 +634,7 @@ void dispGenericMode(int submode, int selected){
 			legendText[0] = mdivs[patternSettings[playingPattern].clockDivMultP]; 
 
 //			legendVals[0] = 0;			// RATE FOR CURR PATTERN
-			legendVals[1] = 0;			// TBD
+			legendVals[1] = patternSettings[playingPattern].solo; 
 			legendVals[2] = 0; 			// TBD
 			legendVals[3] = 0;			// TBD
 			break;
@@ -934,6 +934,9 @@ void loop() {
 
 						if (ppmode3 == 0) { 					// SET CLOCK-DIV-MULT	
 							patternSettings[playingPattern].clockDivMultP = constrain(patternSettings[playingPattern].clockDivMultP + amt, 0, NUM_MULTDIVS-1); // set clock div/mult
+						}
+						if (ppmode3 == 1) { 					// SET MIDI SOLO	
+							patternSettings[playingPattern].solo = constrain(patternSettings[playingPattern].solo + amt, 0, 1); 
 						}
 
 						// PATTERN PARAMS PAGE 2
@@ -1250,6 +1253,10 @@ void loop() {
 						stepDirty = true;
 						dirtyDisplay = true;
 
+					// MIDI SOLO 
+					} else if (patternSettings[playingPattern].solo) {
+						midiNoteOn(thisKey, noteon_velocity);
+
 					// REGULAR SEQ MODE
 					} else {					
 						if (thisKey == 1) {	
@@ -1298,7 +1305,11 @@ void loop() {
 				// ### KEY RELEASE EVENTS
 				
 				if (e.bit.EVENT == KEY_JUST_RELEASED && thisKey != 0) {
-					
+					// MIDI SOLO 
+					if (patternSettings[playingPattern].solo) {
+						midiNoteOff(thisKey);
+					}
+												
 				}
 				
 				if (e.bit.EVENT == KEY_JUST_RELEASED && thisKey != 0 && (noteSelection || stepRecord) && selectedNote > 0) {
@@ -1808,7 +1819,7 @@ void playNote(int patternNum) {
 		break;      
 
 	case STEPTYPE_PLAY:	// regular note on
-		if (cvPattern[playingPattern]){
+		if (cvPattern[patternNum]){
 			sendnoteCV = true;
 		}
 
@@ -2092,6 +2103,7 @@ void initPatterns( void ) {
 		patternSettings[i].current_cycle = 1;
 		patternSettings[i].rndstep = 3;
 		patternSettings[i].autoreset = false;
+		patternSettings[i].solo = false;
 	}
 }
 
