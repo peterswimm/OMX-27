@@ -1812,17 +1812,16 @@ void seqNoteOff(int notenum, int patternNum){
 // Play a note / step (SEQUENCERS)
 void playNote(int patternNum) {
 //	Serial.println(stepNoteP[patternNum][seqPos[patternNum]].note); // Debug
-
 	bool sendnoteCV = false;
+	if (cvPattern[patternNum]){
+		sendnoteCV = true;
+	}
+
 	switch (stepNoteP[patternNum][seqPos[patternNum]].stepType) {
 	case STEPTYPE_MUTE:
 		break;      
 
 	case STEPTYPE_PLAY:	// regular note on
-		if (cvPattern[patternNum]){
-			sendnoteCV = true;
-		}
-
 		seq_velocity = stepNoteP[playingPattern][seqPos[patternNum]].vel;
 
 		noteoff_micros = micros() + ( stepNoteP[patternNum][seqPos[patternNum]].len + 1 )* step_micros ;
