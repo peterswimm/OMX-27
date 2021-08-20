@@ -24,15 +24,16 @@ const uint8_t EEPROM_VERSION = 8;
 // next address 1104 (was 1096 before clock)
 
 // DEFINE CC NUMBERS FOR POTS // CCS mapped to Organelle Defaults
-const int CC1 = 21;
-const int CC2 = 22; 
-const int CC3 = 23;
-const int CC4 = 24;
-const int CC5 = 7;		// change to 25 for EYESY Knob 5
+const int CC1 = 1;
+const int CC2 = 2; 
+const int CC3 = 3;
+const int CC4 = 4;
+const int CC5 = 13
+;		// change to 25 for EYESY Knob 5
 
-const int CC_AUX = 25; // Mother mode - AUX key
-const int CC_OM1 = 26; // Mother mode - enc switch 
-const int CC_OM2 = 28; // Mother mode - enc turn
+const int CC_AUX = 54; // Mother mode - AUX key
+const int CC_OM1 = 16; // Mother mode - enc switch 
+const int CC_OM2 = 14; // Mother mode - enc turn
 
 const int LED_BRIGHTNESS = 50;
 
